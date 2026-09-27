@@ -1,5 +1,5 @@
 // Offline cache for Hotel Nocturne. Bump CACHE when assets change.
-const CACHE = 'nocturne-v6';
+const CACHE = 'nocturne-v7';
 const ASSETS = [
   './', './index.html', './css/style.css', './manifest.webmanifest',
   './js/main.js', './js/engine.js', './js/levels.js',

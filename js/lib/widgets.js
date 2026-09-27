@@ -204,6 +204,7 @@ export function piano(ctx, { melody, title = 'The piano', octave = null }) {
     k.addEventListener('click', () => {
       if (done) return; audio.init(); audio.tone(FREQ[note] * (i < 7 ? 1 : 2), 0.5, 'triangle', 0.1); haptic(6);
       k.classList.add('down'); setTimeout(() => k.classList.remove('down'), 150);
+      const lbl = el('div', 'pkey-label', note); k.appendChild(lbl); setTimeout(() => lbl.remove(), 800);
       const oct = i < 7 ? 1 : 2; const ok = melody[progress] === note && (octave === null || octave === oct);
       if (ok) { progress++; if (progress === melody.length) { done = true; setTimeout(() => { audio.ding(); closeCard(); ctx.solve(); }, 500); } }
       else progress = (note === melody[0] && (octave === null || octave === oct)) ? 1 : 0;

@@ -30,6 +30,8 @@ export default function mount(ctx) {
       // visible key press, so the room works with the sound off
       const flash = el('div', 'key-flash'); place(flash, { x: X0 + i * w, y: 68, w, h: 7 }); layer.appendChild(flash);
       setTimeout(() => flash.remove(), 260);
+      const label = el('div', 'note-label', note); place(label, { x: X0 + i * w - 2, y: 60, w: w + 4, h: 7 }); layer.appendChild(label);
+      setTimeout(() => label.remove(), 800);
       if (MELODY[progress] === note) {
         progress++;
         toast(MELODY.slice(0, progress).join(' \u00b7 '), 1200);

@@ -241,3 +241,9 @@ button { font: inherit; }
 
 .key-flash { position: absolute; border-radius: 0 0 4px 4px; background: rgba(243,201,107,.85); box-shadow: 0 0 14px rgba(243,201,107,.9); pointer-events: none; animation: keyflash .26s ease-out forwards; }
 @keyframes keyflash { from { opacity: 1; } to { opacity: 0; } }
+
+.note-label { position: absolute; display: grid; place-items: center; font-family: var(--font-display); font-size: 3.6cqh; font-weight: bold; color: var(--gold-2); text-shadow: 0 0 8px #000, 0 0 14px rgba(243,201,107,.8); pointer-events: none; animation: notefloat .8s ease-out forwards; }
+@keyframes notefloat { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-40%); } }
+.pkey { position: relative; }
+.pkey-label { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-family: var(--font-display); font-weight: bold; font-size: 16px; color: #201500; pointer-events: none; animation: pkeyfade .8s ease-out forwards; }
+@keyframes pkeyfade { from { opacity: 1; } to { opacity: 0; transform: translateY(-14px); } }
