@@ -64,6 +64,7 @@ Ten rooms on these floors are hand-made with a mechanic that appears nowhere els
 
 - Plain HTML, CSS and ES modules. No build step, no dependencies.
 - Installable PWA with offline cache (`sw.js`, `manifest.webmanifest`).
+- English and German. The switch sits on the title screen; strings live in `js/lang/de.js`, keyed by the English text (`js/i18n.js`).
 - Deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 - Artwork generated with OpenArt (Nano Banana Pro / Nano Banana 2) from one style reference, see `tools/fetch_assets.py` and `tools/fetch_floors.py`.
 

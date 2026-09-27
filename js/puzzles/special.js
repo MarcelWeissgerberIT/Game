@@ -152,9 +152,9 @@ export function spot(ctx) {
   hotspot({ x: 0, y: 18, w: 21, h: 46, label: 'Paintings', onTap: () => {
     const body = showCard(`<h2>Twin paintings</h2><svg viewBox="0 0 300 160" width="100%" style="border:4px solid #d9a441;border-radius:4px">${scene(false)}</svg>
       <svg viewBox="0 0 300 160" width="100%" id="alt" style="border:4px solid #d9a441;border-radius:4px;margin-top:8px;touch-action:manipulation">${scene(true)}<g id="marks"></g></svg>
-      <p style="text-align:center;opacity:.8;font-size:13px" id="spot-count">Five things differ. Tap them on the lower painting. Found: ${found.size} of 5.</p>`);
+      <p style="text-align:center;opacity:.8;font-size:13px" id="spot-count"></p>`);
     const alt = $('#alt', body), marks = $('#marks', body), count = $('#spot-count', body);
-    const redraw = () => { marks.innerHTML = [...found].map((i) => `<circle cx="${DIFFS[i].x}" cy="${DIFFS[i].y}" r="${DIFFS[i].r}" fill="none" stroke="#7fd18a" stroke-width="3"/>`).join(''); count.textContent = `Five things differ. Tap them on the lower painting. Found: ${found.size} of 5.`; };
+    const redraw = () => { marks.innerHTML = [...found].map((i) => `<circle cx="${DIFFS[i].x}" cy="${DIFFS[i].y}" r="${DIFFS[i].r}" fill="none" stroke="#7fd18a" stroke-width="3"/>`).join(''); count.textContent = ctx.t('Five things differ. Tap them on the lower painting. Found: {n} of 5.', { n: found.size }); };
     redraw();
     alt.addEventListener('click', (e) => {
       const b = alt.getBoundingClientRect(); const x = (e.clientX - b.left) * 300 / b.width, y = (e.clientY - b.top) * 160 / b.height;

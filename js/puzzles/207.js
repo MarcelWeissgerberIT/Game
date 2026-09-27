@@ -9,7 +9,7 @@ export default function mount(ctx) {
 
   hotspot({ x: 32, y: 40, w: 36, h: 37, label: 'Door', onTap: () => toast('Locked. The mechanism is tied to the scale somehow.') });
 
-  WEIGHTS.forEach((w, i) => hotspot({ x: 3 + i * 4.4, y: 55, w: 4.4, h: 8, label: `Weight ${w}`, onTap: () => toast(`A brass weight stamped ${ROMAN[w]}.`) }));
+  WEIGHTS.forEach((w, i) => hotspot({ x: 3 + i * 4.4, y: 55, w: 4.4, h: 8, label: `Weight ${w}`, onTap: () => toast(ctx.t('A brass weight stamped {r}.', { r: ROMAN[w] })) }));
 
   hotspot({ x: 72, y: 50, w: 26, h: 24, label: 'Scale', onTap: () => {
     const body = showCard(`<h2>The scale</h2><svg viewBox="0 0 300 200" width="100%" id="scale-svg">

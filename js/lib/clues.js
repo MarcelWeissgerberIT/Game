@@ -1,4 +1,5 @@
 // Clue card renderers for the generated floors. Each returns HTML for ctx.showCard.
+import { t } from '../i18n.js';
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 export const roman = (n) => ROMAN[n] ?? String(n);
 const note = (inner, title) => `${title ? `<h2>${title}</h2>` : ''}<div class="note">${inner}</div>`;
@@ -38,7 +39,7 @@ export const CLUES = {
     const notes = melody.map((n, i) => { const x = 70 + i * (270 / Math.max(melody.length - 1, 1)), y = pos[n]; return `<ellipse cx="${x}" cy="${y}" rx="8" ry="5.5" fill="#2b2317" transform="rotate(-20 ${x} ${y})"/><line x1="${x + 7}" y1="${y - 2}" x2="${x + 7}" y2="${y - 40}" stroke="#2b2317" stroke-width="2"/>${n === 'C' ? `<line x1="${x - 13}" y1="${y}" x2="${x + 13}" y2="${y}" stroke="#2b2317" stroke-width="1.5"/>` : ''}<text x="${x}" y="128" text-anchor="middle" font-family="Georgia" font-size="16" fill="#2b2317">${n}</text>`; }).join('');
     return `<h2>${title}</h2><div class="note" style="transform:none;padding:10px"><svg viewBox="0 0 360 140" width="100%">${[50, 60, 70, 80, 90].map((y) => `<line x1="20" y1="${y}" x2="340" y2="${y}" stroke="#2b2317" stroke-width="1.5"/>`).join('')}<text x="24" y="92" font-family="Georgia" font-size="58" fill="#2b2317">&#119070;</text>${notes}</svg>${caption ? `<p style="margin:6px 0 0;font-size:12px">${caption}</p>` : ''}</div>`;
   },
-  weights: ({ title = 'The shelf', weights, target }) => note(`<p style="margin:0 0 6px;font-size:12px;letter-spacing:.2em">BRASS WEIGHTS</p><div class="big" style="font-size:22px">${weights.map((w) => roman(w)).join(' · ')}</div><p style="margin:0;font-size:12px">The sealed box on the scale is stamped ${roman(target)}.</p>`, title),
+  weights: ({ title = 'The shelf', weights, target }) => note(`<p style="margin:0 0 6px;font-size:12px;letter-spacing:.2em">BRASS WEIGHTS</p><div class="big" style="font-size:22px">${weights.map((w) => roman(w)).join(' · ')}</div><p style="margin:0;font-size:12px">${t('The sealed box on the scale is stamped {r}.', { r: roman(target) })}</p>`, title),
   cipher: ({ title = 'Scratched into the brass', align, word }) => `<h2>${title}</h2><div class="clue-row" style="font-family:Georgia;font-size:26px;color:#f3c96b">${align}</div><div class="clue-row" style="font-family:Georgia;font-size:30px;letter-spacing:.3em;color:#f3c96b">${word.split('').join(' ')}</div>`,
   shape: ({ title = 'A shape', path, caption = 'Trace it in one stroke, starting at the ring.' }) => {
     const P = [50, 150, 250];

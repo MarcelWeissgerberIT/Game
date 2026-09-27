@@ -1,6 +1,9 @@
 // Core helpers shared by every room: stage geometry, hotspots, inventory, dialogs, keypad, audio.
+import { t, translateTree } from './i18n.js';
+export { t };
 
 export const $ = (sel, root = document) => root.querySelector(sel);
+export const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
 export const stage = $('#stage');
 export const layer = $('#layer');
@@ -97,7 +100,7 @@ export function clearLayer() { layer.innerHTML = ''; }
 // ---------- toast ----------
 let toastTimer = 0;
 export function toast(msg, ms = 2200) {
-  toastEl.textContent = msg;
+  toastEl.textContent = t(msg);
   toastEl.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toastEl.classList.remove('show'), ms);
@@ -121,7 +124,7 @@ export const inventory = {
     inventoryEl.innerHTML = '';
     for (const [id, it] of this.items) {
       const slot = el('div', 'inv-slot' + (this.selected === id ? ' selected' : '') + (pop && this.selected === id ? ' pop' : ''), it.icon);
-      slot.title = it.label;
+      slot.title = t(it.label);
       slot.addEventListener('click', () => this.select(id));
       inventoryEl.appendChild(slot);
     }
@@ -135,11 +138,12 @@ export function showCard(html, { closable = true, onClose = null, cls = '' } = {
   modalCard.innerHTML = '';
   if (closable) {
     const x = el('button', 'icon-btn modal-close', '&times;');
-    x.setAttribute('aria-label', 'Close');
+    x.setAttribute('aria-label', t('Close'));
     x.addEventListener('click', closeCard);
     modalCard.appendChild(x);
   }
   const body = el('div', 'modal-body', html);
+  translateTree(body);
   modalCard.appendChild(body);
   onCardClose = onClose;
   modalEl.classList.remove('hidden');
@@ -157,6 +161,7 @@ export function isCardOpen() { return !modalEl.classList.contains('hidden'); }
 
 // ---------- keypad ----------
 export function showKeypad({ code, title = 'Keypad', onSolve }) {
+  if (/^Room \d+$/.test(title)) title = t('Room {n}', { n: title.slice(5) });
   const len = code.length;
   let buf = '';
   const body = showCard(`<h2>${title}</h2><div class="keypad-display" id="kp-display"></div><div class="keypad" id="kp"></div>`);

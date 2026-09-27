@@ -1,5 +1,6 @@
 import { LEVELS } from './levels.js';
 import * as E from './engine.js';
+import { t, translateTree, setLang, lang, missing } from './i18n.js';
 
 const SAVE_KEY = 'nocturne.progress.v1';
 const screens = { title: E.$('#screen-title'), levels: E.$('#screen-levels'), game: E.$('#screen-game') };
@@ -33,13 +34,13 @@ function renderGrid() {
   LEVELS.forEach((lv, i) => {
     if (lv.floor !== lastFloor) {
       lastFloor = lv.floor;
-      grid.appendChild(E.el('div', 'floor-label', lv.floor));
+      grid.appendChild(E.el('div', 'floor-label', t(lv.floor)));
     }
     const done = progress.done.includes(lv.id);
     const locked = i > progress.unlocked;
-    const t = E.el('div', 'door-tile' + (done ? ' done' : '') + (locked ? ' locked' : ''), `<span>${lv.id}</span><small>${locked ? 'locked' : lv.title}</small><span class="knob"></span>`);
-    if (!locked) t.addEventListener('click', () => { E.audio.init(); startLevel(i); });
-    grid.appendChild(t);
+    const tile = E.el('div', 'door-tile' + (done ? ' done' : '') + (locked ? ' locked' : ''), `<span>${lv.id}</span><small>${locked ? t('locked') : t(lv.title)}</small><span class="knob"></span>`);
+    if (!locked) tile.addEventListener('click', () => { E.audio.init(); startLevel(i); });
+    grid.appendChild(tile);
   });
 }
 
@@ -57,7 +58,7 @@ function startLevel(i) {
     hintsShown = 0; lastHintAt = 0; levelStartedAt = Date.now();
     roomImg.src = lv.image;
     roomImg.alt = `Room ${lv.id}`;
-    hudTitle.textContent = `Room ${lv.id}`;
+    hudTitle.textContent = t('Room {n}', { n: lv.id });
     E.setDoor(lv.door);
     const ctx = {
       ...E,
@@ -83,10 +84,10 @@ function onSolved(lv, i) {
     const newFloor = nextLv && nextLv.floor !== lv.floor;
     const body = E.showCard(
       last
-        ? `<h2>${lv.floor} cleared</h2><div class="end-card"><p>The elevator hums back to life and carries you upward.</p><p>More floors of Hotel Nocturne are under renovation. Check back soon.</p></div><div class="modal-actions"><button class="btn btn-primary btn-small" id="btn-end">Back to lobby</button></div>`
+        ? `<h2>${t('{floor} cleared', { floor: t(lv.floor) })}</h2><div class="end-card"><p>The elevator hums back to life and carries you upward.</p><p>More floors of Hotel Nocturne are under renovation. Check back soon.</p></div><div class="modal-actions"><button class="btn btn-primary btn-small" id="btn-end">Back to lobby</button></div>`
         : newFloor
-          ? `<h2>${lv.floor} cleared</h2><p style="text-align:center">The elevator shudders, then rises. The doors open on ${nextLv.floor}. The rooms up here are quieter, and the riddles less forgiving.</p><div class="modal-actions"><button class="btn btn-primary btn-small" id="btn-next">Step out</button></div>`
-          : `<h2>Room ${lv.id} unlocked</h2><p style="text-align:center">The door swings open onto the next corridor.</p><div class="modal-actions"><button class="btn btn-primary btn-small" id="btn-next">Next room</button></div>`,
+          ? `<h2>${t('{floor} cleared', { floor: t(lv.floor) })}</h2><p style="text-align:center">${t('The elevator shudders, then rises. The doors open on {floor}. The rooms up here are quieter, and the riddles less forgiving.', { floor: t(nextLv.floor) })}</p><div class="modal-actions"><button class="btn btn-primary btn-small" id="btn-next">Step out</button></div>`
+          : `<h2>${t('Room {n} unlocked', { n: lv.id })}</h2><p style="text-align:center">The door swings open onto the next corridor.</p><div class="modal-actions"><button class="btn btn-primary btn-small" id="btn-next">Next room</button></div>`,
       { closable: false }
     );
     const b = E.$('#btn-next', body) || E.$('#btn-end', body);
@@ -107,7 +108,7 @@ function showHint() {
   if (hintsShown < lv.hints.length && since < needed) {
     const wait = Math.ceil((needed - since) / 1000);
     const prev = hintsShown > 0 ? `<p>${lv.hints[hintsShown - 1]}</p>` : '<p>Keep looking. Every room can be solved with what is in it.</p>';
-    E.showCard(`<h2>Concierge</h2>${prev}<p style="opacity:.6;font-size:13px;text-align:center">${hintsShown > 0 ? 'Another' : 'A'} hint in ${wait}s.</p>`);
+    E.showCard(`<h2>Concierge</h2>${prev}<p style="opacity:.6;font-size:13px;text-align:center">${t(hintsShown > 0 ? 'Another hint in {s}s.' : 'A hint in {s}s.', { s: wait })}</p>`);
     return;
   }
   E.showCard(`<h2>Concierge</h2><p>${lv.hints[idx]}</p>`);
@@ -118,16 +119,28 @@ function showHint() {
 E.$('#btn-play').addEventListener('click', () => { E.audio.init(); startLevel(Math.min(progress.unlocked, LEVELS.length - 1)); });
 E.$('#btn-levels').addEventListener('click', () => { E.audio.init(); renderGrid(); show('levels'); });
 E.$('#btn-levels-back').addEventListener('click', () => show('title'));
-E.$('#levels-title').textContent = 'Rooms';
 E.$('#btn-reset').addEventListener('click', () => {
-  if (confirm('Reset all progress?')) { progress = { unlocked: 0, done: [] }; save(); renderGrid(); }
+  if (confirm(t('Reset all progress?'))) { progress = { unlocked: 0, done: [] }; save(); renderGrid(); }
 });
+// language switch
+const applyLang = () => {
+  translateTree(E.$('#screen-title')); translateTree(E.$('#screen-levels')); translateTree(E.$('.hud'));
+  E.$$('.lang-btn').forEach((b) => b.classList.toggle('on', b.dataset.lang === lang));
+  E.$('#btn-play').textContent = t(progress.unlocked > 0 || progress.done.length ? 'Continue' : 'Check in');
+  E.$('#btn-levels').textContent = t('Choose a room');
+  E.$('.title-foot').textContent = t('Tap, swipe, tilt and shake your way through the hotel.');
+  E.$('#levels-title').textContent = t('Rooms');
+  E.$('.panel-foot').textContent = t('More doors are being renovated. Check back soon.');
+  renderGrid();
+};
+E.$$('.lang-btn').forEach((b) => b.addEventListener('click', () => { setLang(b.dataset.lang); location.reload(); }));
+applyLang();
+if (E.DEBUG) window.__missing = missing;
 E.$('#btn-menu').addEventListener('click', () => {
   if (cleanup) { try { cleanup(); } catch { /* ignore */ } cleanup = null; }
   E.closeCard(); renderGrid(); show('levels');
 });
 E.$('#btn-hint').addEventListener('click', () => { E.audio.init(); showHint(); });
-E.$('#btn-play').textContent = progress.unlocked > 0 || progress.done.length ? 'Continue' : 'Check in';
 
 if (E.DEBUG) window.__forceSolve = () => onSolved(LEVELS[current], current);
 
