@@ -3,6 +3,7 @@
 // rooms x06-x10 use layout B (four sconces above the door, panel right, shelf left, note).
 import { mountRoom } from './lib/room.js';
 import { MORSE_TABLE } from './lib/widgets.js';
+import { SPECIAL } from './puzzles/special.js';
 
 const FLOOR_NAMES = { 3: 'Floor Three', 4: 'Floor Four', 5: 'Floor Five', 6: 'Floor Six', 7: 'Floor Seven', 8: 'Floor Eight', 9: 'Floor Nine', 10: 'Floor Ten' };
 const FLOOR_INTRO = {
@@ -34,6 +35,7 @@ const lamps = (n, presses, rule = 'neighbors') => { // start state = all on, the
 };
 
 const R = (id, layout, title, intro, hints, objects, doorText) => ({ id, layout, title, intro, hints, objects, doorText });
+const S = (id, custom, title, intro, hints) => ({ id, custom, title, intro, hints, objects: [] });
 
 // ---------------- Floor 3: warm-up with the classic tools ----------------
 const F3 = [
@@ -43,8 +45,7 @@ const F3 = [
     [item('frame', 'key', 'A spare key, taped behind the frame.'), { at: 'door', lock: { kind: 'keylock', item: 'key' }, flavor: 'A keyhole. Nothing in it.' }, clue('note', { kind: 'text', lines: ['Housekeeping: the spare is where the guests never look.'] })]),
   R(303, 'A', 'The Signal', 'The sconce by the keypad will not stop flickering.', ['The flicker is Morse. The picture frame holds the chart.', 'Short-short-long-long-long, then short-short-short-short-long, then long-short-short-short-short: 2, 4, 6.'],
     [clue('sconce', { kind: 'morselamp', code: '246' }), clue('frame', { kind: 'morse', table: MORSE_TABLE }), keypad('246')]),
-  R(304, 'A', 'The Count', 'A picture full of little shapes.', ['Count each kind of shape.', 'Suns, moons, stars, then diamonds: 3, 5, 2, 6.'],
-    [clue('frame', { kind: 'count', groups: [{ glyph: G.sun, n: 3 }, { glyph: G.moon, n: 5 }, { glyph: G.star, n: 2 }, { glyph: G.diamond, n: 6 }], caption: '' }), clue('note', { kind: 'order', items: [G.sun, G.moon, G.star, G.diamond], caption: 'Count them in this order.' }), keypad('3526')]),
+  S(304, 'shadows', 'The Grille', 'A lamp on a rail, a brass grille, and a wall full of shadows.', ['The lamp slides. Somewhere along the rail the shadow stops being a mess.', 'Slide slowly. At the right spot the shadow reads 583.']),
   R(305, 'A', 'Half Past', 'A clock in the frame, stopped.', ['Hours, then minutes.', '7:30 is 0730.'],
     [clue('frame', { kind: 'clock', hour: 7, minute: 30, caption: 'Stopped at check-out.' }), keypad('0730')]),
   R(306, 'B', 'The Four Lamps', 'Four lamps above the door, all dark.', ['The note lists an order.', 'Third, first, fourth, second.'],
@@ -63,8 +64,7 @@ const F3 = [
 const F4 = [
   R(401, 'A', 'The Alphabet', 'A word on the note. A keypad that only takes numbers.', ['A is 1, B is 2.', 'B E A D is 2514.'],
     [clue('note', { kind: 'letters', word: 'BEAD' }), keypad('2514')]),
-  R(402, 'A', 'The Tally', 'Someone scratched marks into the frame.', ['Count the strokes in each row.', '5, 3, 8, 1.'],
-    [clue('frame', { kind: 'tally', digits: [5, 3, 8, 1], caption: 'One row per figure.' }), keypad('5381')]),
+  S(402, 'ink', 'Invisible Ink', 'A blank letter on the desk, and a candle burning low.', ['Heat brings some inks out. Hold your finger on the paper.', 'The letter spells it out: 7 2 9 4. It fades, so remember it.']),
   R(403, 'A', 'The Glass', 'The picture glass is fogged over.', ['Wipe it. The writing is backwards.', '6 1 9 3, read the right way round.'],
     [clue('frame', { kind: 'fog', text: '6193', mirrored: true, title: 'Fogged glass' }), keypad('6193')]),
   R(404, 'A', 'The Loupe', 'A jeweller\'s loupe lies on the note.', ['Use the loupe on the picture. The note gives the order.', 'Diamond, star, moon, sun: 8 0 4 7.'],
@@ -90,8 +90,7 @@ const F5 = [
     [clue('frame', { kind: 'clock', hour: 4, minute: 20, mirror: true, caption: 'Seen in the mirrored wall.' }), keypad('0420')]),
   R(502, 'A', 'Backwards', 'The note is written backwards.', ['Read it in a mirror, or in your head.', '7 3 5 9 1.'],
     [clue('note', { kind: 'mirrored', text: '73591' }), keypad('73591')]),
-  R(503, 'A', 'Long Signal', 'The sconce flickers again. Four figures this time.', ['The chart is in the frame.', '9, 0, 3, 5.'],
-    [clue('sconce', { kind: 'morselamp', code: '9035' }), clue('frame', { kind: 'morse', table: MORSE_TABLE }), keypad('9035')]),
+  S(503, 'knocks', 'The Pipe', 'Steam, tiles, and a pipe that will not stop knocking.', ['Listen to the pipe. The knocks come in groups.', 'Two, one, four, three.']),
   R(504, 'A', 'Distractions', 'A picture full of shapes, but only some count.', ['The note says which shapes to count, and in which order.', 'Stars, hearts, spades: 4, 7, 3.'],
     [clue('frame', { kind: 'count', groups: [{ glyph: G.star, n: 4 }, { glyph: G.heart, n: 7 }, { glyph: G.spade, n: 3 }, { glyph: G.club, n: 5 }, { glyph: G.moon, n: 2 }] }), clue('note', { kind: 'order', items: [G.star, G.heart, G.spade], caption: 'Only these. In this order.' }), keypad('473')]),
   R(505, 'A', 'Arithmetic', 'A riddle on the note.', ['Do the sums.', 'Twelve dozen is 144, minus 1 is 143. Then 2. 1432.'],
@@ -124,8 +123,7 @@ const F6 = [
     [{ at: 'panel', lock: { kind: 'memory', seq: [3, 0, 2, 0, 1, 3], rounds: [4, 6] } }]),
   R(607, 'B', 'Faster', 'The lever again. Five flashes.', ['Watch, then repeat within eight seconds.', 'Second, fourth, third, first, fourth.'],
     [{ at: 'panel', lock: { kind: 'timed', order: [1, 3, 2, 0, 3], limit: 8000 }, label: 'Lever' }]),
-  R(608, 'B', 'Seventeen', 'Six weights, one box.', ['Seventeen. More than one way.', 'II, V and X, or VII and X.'],
-    [clue('shelf', { kind: 'weights', weights: [2, 5, 6, 7, 10, 13], target: 17 }), { at: 'panel', lock: { kind: 'scale', weights: [2, 5, 6, 7, 10, 13], target: 17, roman: ROMAN } }]),
+  S(608, 'recipe', 'Kitchen Weights', 'A loaf on the scale. Apples, eggs and spoons on the counter.', ['The recipe book tells you what weighs what.', 'An egg is 1, a spoon 2, an apple 3, the loaf 8. Any mix that makes 8.']),
   R(609, 'B', 'Six Studs', 'A longer shape on the note.', ['One stroke, start at the ring.', 'Top-left, top-middle, centre, bottom-middle, bottom-right, middle-right.'],
     [clue('note', { kind: 'shape', path: [0, 1, 4, 7, 8, 5] }), { at: 'panel', lock: { kind: 'pattern', path: [0, 1, 4, 7, 8, 5] } }]),
   R(610, 'B', 'The Music Box', 'The panel hides a small keyboard.', ['The sheet is on the shelf.', 'E G A G E D.'],
@@ -138,15 +136,14 @@ const F7 = [
     [clue('frame', { kind: 'count', groups: [{ glyph: G.star, n: 6 }, { glyph: G.spark, n: 2 }, { glyph: G.moon, n: 5 }, { glyph: G.sun, n: 3 }, { glyph: G.cross, n: 4 }] }), clue('note', { kind: 'order', items: [G.star, G.spark, G.moon, G.sun, G.cross] }), keypad('62534')]),
   R(702, 'A', 'Numerals', 'Roman numerals, five of them.', ['Some numerals are two digits.', 'XII, IX, III, XI: 12 9 3 11 is 129311.'],
     [clue('note', { kind: 'text', lines: ['XII · IX · III · XI'], title: 'Scratched into the note' }), keypad('129311')]),
-  R(703, 'A', 'Twelve Letters', 'A bigger wheel this time.', ['Align as the note says, then read.', 'Line H up under 3 and read K, A, D, E: 6810.'],
-    [clue('frame', { kind: 'wheel', letters: 'ABCDEFGHIJKL'.split('') }), clue('note', { kind: 'cipher', align: 'H = 3', word: 'KADE' }), keypad('6810')]),
+  S(703, 'stars', 'The Porthole', 'A round window onto the night. The stars drift as you turn.', ['Pan across the sky. One patch of stars is too regular.', 'Four constellations shaped like digits: 3 1 6 2.']),
   R(704, 'A', 'The Loupe Again', 'Something in the varnish, too small to read.', ['The loupe is under the note. The sconce gives the order.', 'Bell, key, heart, club, lily: 5 2 9 4 0.'],
     [item('note', 'lens', 'The loupe. Someone keeps leaving it around.'), clue('frame', { kind: 'lens', items: [{ glyph: G.heart, digit: 9, x: 20, y: 20 }, { glyph: G.bell, digit: 5, x: 75, y: 30 }, { glyph: G.lily, digit: 0, x: 50, y: 50 }, { glyph: G.key, digit: 2, x: 25, y: 75 }, { glyph: G.club, digit: 4, x: 75, y: 80 }] }, { requires: 'lens', flavor: 'A dark canvas. Something faint in the varnish.', label: 'Picture' }),
       clue('sconce', { kind: 'order', title: 'Scratched on the sconce', items: [G.bell, G.key, G.heart, G.club, G.lily], caption: 'In this order.' }), keypad('52940')]),
   R(705, 'A', 'Pieces of the Night', 'The picture has been cut up.', ['Slide the pieces.', 'Corners first.'],
     [{ at: 'frame', lock: { kind: 'slide', region: { x: 10, y: 4, w: 80, h: 45 }, seed: 705 }, label: 'Picture' }]),
-  R(706, 'B', 'Skipping', 'Six lamps. Each switch flips itself and the lamps two away.', ['Think in pairs.', 'Flip switches 1, 4 and 6.'],
-    [{ at: 'panel', lock: { kind: 'lightsout', lamps: lamps(6, [0, 3, 5], 'skip'), rule: 'skip', note: 'Each switch flips itself and the lamps two places away.' } }]),
+  R(706, 'B', 'Skipping', 'Six lamps. Each switch flips itself and the lamps two away.', ['Flip one switch and watch which lamps answer.', 'Each switch flips itself and the lamps two places away. Flip 1, 4 and 6.'],
+    [{ at: 'panel', lock: { kind: 'lightsout', lamps: lamps(6, [0, 3, 5], 'skip'), rule: 'skip', note: 'Nobody remembers how this one is wired. Try a switch and watch.' } }]),
   R(707, 'B', 'Six Wires', 'Six wires, six terminals.', ['Colour to colour.', 'Purple and orange are new.'],
     [{ at: 'panel', lock: { kind: 'wires', colors: COLORS, right: [4, 0, 5, 1, 3, 2] } }]),
   R(708, 'B', 'Six Taps', 'Six taps on four lamps.', ['Repeats allowed.', 'Third, third, first, fourth, second, first.'],
@@ -163,8 +160,7 @@ const F8 = [
     [clue('note', { kind: 'math', lines: ['A gross of candles,', 'a score of guests,', 'a baker\'s dozen of keys.'], caption: 'Write the three numbers in a row.' }), keypad('1442013')]),
   R(802, 'A', 'Both Reversed', 'The clock is reflected. The note is mirrored.', ['The note says which is first.', 'Clock 10:45 then the note 3 1: 104531.'],
     [clue('frame', { kind: 'clock', hour: 10, minute: 45, mirror: true, caption: 'A reflection.' }), clue('note', { kind: 'mirrored', text: '31', caption: 'After the clock.' }), keypad('104531')]),
-  R(803, 'A', 'Five Signals', 'The sconce again, five figures.', ['The chart hangs in the frame.', '1, 7, 0, 8, 3.'],
-    [clue('sconce', { kind: 'morselamp', code: '17083' }), clue('frame', { kind: 'morse', table: MORSE_TABLE }), keypad('17083')]),
+  S(803, 'spot', 'Twin Paintings', 'Two paintings, supposedly identical.', ['Five details differ. Tap them on the lower one.', 'A bird, a flag, a star, a window, a fish.']),
   R(804, 'A', 'Under Glass and Fog', 'The glass is fogged, and the writing beneath is tiny.', ['Wipe the glass first. The loupe from the note reads the sconce.', 'Fog says 30, then key, bell, spark. The sconce gives 7, 4, 9: 30749.'],
     [clue('frame', { kind: 'fog', text: `30 ${G.key}${G.bell}${G.spark}`, mirrored: false, title: 'Fogged glass' }), item('note', 'lens', 'The loupe again.'), clue('sconce', { kind: 'lens', items: [{ glyph: G.bell, digit: 4, x: 30, y: 30 }, { glyph: G.key, digit: 7, x: 70, y: 45 }, { glyph: G.spark, digit: 9, x: 40, y: 75 }] }, { requires: 'lens', flavor: 'Tiny scratches on the sconce. Too small.', label: 'Sconce' }),
       keypad('30749')]),
@@ -190,18 +186,16 @@ const F9 = [
     [clue('note', { kind: 'letters', word: 'FACADE' }), keypad('613145')]),
   R(903, 'A', 'Two Numbers', 'Two rows of lamps in the picture.', ['Each row is a binary number. First row, then second.', '1101 is 13, 0111 is 7: 137.'],
     [clue('frame', { kind: 'binary', bits: [1, 1, 0, 1], title: 'Upper row' }), clue('note', { kind: 'binary', bits: [0, 1, 1, 1], title: 'Lower row', caption: 'The second number.' }), keypad('137')]),
-  R(904, 'A', 'The Long Way', 'A bigger maze under the glass.', ['Tilt gently.', 'Follow the left wall if you get lost.'],
-    [{ at: 'keypad', lock: { kind: 'maze', cols: 9, rows: 13, seed: 904 }, label: 'Panel' }]),
+  S(904, 'elevator', 'Four Portraits', 'An elevator, a panel of ten buttons, and four portraits with opinions.', ['One portrait lies. Find the floor that fits the other three.', 'The maid lies. Even, below five, a square: floor 4.']),
   R(905, 'A', 'Twelve on the Wheel', 'The wheel again, wider.', ['Align, then read. The sconce carries the alignment.', 'Line K up under 9 and read B, J, E, K: 0839.'],
     [clue('frame', { kind: 'wheel', letters: 'ABCDEFGHIJKL'.split('') }), clue('sconce', { kind: 'cipher', title: 'Scratched on the sconce', align: 'K = 9', word: 'BJEK' }, { label: 'Sconce' }), keypad('0839')]),
   R(906, 'B', 'Two Rounds, Seven', 'Five then seven.', ['Watch, repeat, watch again.', 'Fourth, fourth, first, second, third, first, second.'],
     [{ at: 'panel', lock: { kind: 'memory', seq: [3, 3, 0, 1, 2, 0, 1], rounds: [5, 7] } }]),
-  R(907, 'B', 'Crossed', 'Six wires, badly tangled.', ['Colour to colour.', 'Start with the ones that are already close.'],
-    [{ at: 'panel', lock: { kind: 'wires', colors: COLORS, right: [5, 3, 4, 0, 2, 1] } }]),
+  R(907, 'B', 'Crossed', 'Six wires, badly tangled.', ['The colours have faded. Touch a terminal and it shows its colour for a moment.', 'Remember what you saw, then connect colour to colour.'],
+    [{ at: 'panel', lock: { kind: 'wires', colors: COLORS, right: [5, 3, 4, 0, 2, 1], hidden: true } }]),
   R(908, 'B', 'Five Dials', 'Five tokens, five dials, and the rim is worn.', ['The note has the legend.', 'Star, spade, spark, cross, moon: 5, 25, 15, 30, 35.'],
     [clue('shelf', { kind: 'symbols', order: [G.star, G.spade, G.spark, G.cross, G.moon] }), clue('note', { kind: 'symbols', legend: LEGEND8 }), { at: 'panel', lock: { kind: 'dials', combo: [5, 25, 15, 30, 35], steps: STEPS8 } }]),
-  R(909, 'B', 'Seven Taps', 'Seven taps on four lamps.', ['Repeats.', 'Fourth, first, first, second, third, fourth, second.'],
-    [clue('note', { kind: 'order', items: ['IV', 'I', 'I', 'II', 'III', 'IV', 'II'] }), { at: 'sconces', lock: { kind: 'sequence', order: [3, 0, 0, 1, 2, 3, 1] } }]),
+  S(909, 'echo', 'The Gramophone', 'A gramophone hums six notes, too high to sing along.', ['Play the same notes on the piano, an octave lower.', 'On the lowest keys: E G B A F D.']),
   R(910, 'B', 'The Door Itself', 'The panel holds a picture of the door, cut up.', ['Slide.', 'Corners first, then edges.'],
     [{ at: 'panel', lock: { kind: 'slide', region: { x: 0, y: 20, w: 100, h: 60 }, seed: 910 }, label: 'Panel' }]),
 ];
@@ -214,16 +208,14 @@ const F10 = [
     [clue('frame', { kind: 'symbols', order: [G.spark, G.moon, G.lily, G.sun, G.star], caption: 'Seen in a mirror.', title: 'The picture, reflected' }), clue('note', { kind: 'symbols', legend: LEGEND8, caption: 'Two digits per mark.' }), keypad('0520003515')]),
   R(1003, 'A', 'Last Signal', 'The sconce flickers, five figures.', ['The chart hangs in the frame.', '4, 4, 9, 2, 6.'],
     [clue('sconce', { kind: 'morselamp', code: '44926' }), clue('frame', { kind: 'morse', table: MORSE_TABLE }), keypad('44926')]),
-  R(1004, 'A', 'Six Shapes', 'Six kinds of shapes, and a fog on the glass.', ['Wipe the fog for the order. Count in the picture.', 'Moons, keys, bells, hearts, stars, clubs: 3 2 7 5 4 6.'],
-    [clue('note', { kind: 'fog', text: `${G.moon} ${G.key} ${G.bell} ${G.heart} ${G.star} ${G.club}`, title: 'Fogged note' }), clue('frame', { kind: 'count', groups: [{ glyph: G.moon, n: 3 }, { glyph: G.key, n: 2 }, { glyph: G.bell, n: 7 }, { glyph: G.heart, n: 5 }, { glyph: G.star, n: 4 }, { glyph: G.club, n: 6 }] }), keypad('327546')]),
+  S(1004, 'darkroom', 'Lights Out', 'Pitch black. A torch with a tired battery.', ['Press and hold to shine the torch. Four marks are hidden on the walls.', 'I 5, II 2, III 7, IV 1: 5271.']),
   R(1005, 'A', 'Eight Studs', 'A shape that covers almost the whole grid.', ['One stroke.', 'Centre, top-middle, top-right, middle-right, bottom-right, bottom-middle, bottom-left, middle-left.'],
     [clue('note', { kind: 'shape', path: [4, 1, 2, 5, 8, 7, 6, 3] }), { at: 'keypad', lock: { kind: 'pattern', path: [4, 1, 2, 5, 8, 7, 6, 3] }, label: 'Panel' }]),
   R(1006, 'B', 'Seven Flashes', 'The lever. Seven flashes, nine seconds.', ['Watch, then go.', 'Third, first, fourth, second, fourth, first, third.'],
     [{ at: 'panel', lock: { kind: 'timed', order: [2, 0, 3, 1, 3, 0, 2], limit: 9000 }, label: 'Lever' }]),
   R(1007, 'B', 'Three Rounds, Eight', 'Five, seven, eight.', ['The last round is eight flashes.', 'Second, third, first, fourth, third, second, fourth, first.'],
     [{ at: 'panel', lock: { kind: 'memory', seq: [1, 2, 0, 3, 2, 1, 3, 0], rounds: [5, 7, 8] } }]),
-  R(1008, 'B', 'All Six', 'Six lamps, neighbouring switches, and a bad start.', ['Every switch flips its neighbours.', 'Flip switches 1, 3, 4 and 6.'],
-    [{ at: 'panel', lock: { kind: 'lightsout', lamps: lamps(6, [0, 2, 3, 5]), rule: 'neighbors' } }]),
+  S(1008, 'twoHands', 'Two Hands', 'A steel door, a bolt as thick as an arm, and two brass hand-plates.', ['Both plates must be held at once. Then the bolt moves.', 'Two fingers on the plates, a third slides the bolt. On a keyboard: A and L.']),
   R(1009, 'B', 'Twenty-five', 'The heaviest box in the hotel.', ['Twenty-five from six weights.', 'IV, VIII and XIII.'],
     [clue('shelf', { kind: 'weights', weights: [4, 6, 8, 9, 13, 20], target: 25 }), { at: 'panel', lock: { kind: 'scale', weights: [4, 6, 8, 9, 13, 20], target: 25, roman: ROMAN } }]),
   R(1010, 'B', 'The Roof', 'The last door. The panel is dead until the fuse is in.', ['The fuse is on the shelf. Then the lamps will tell you the code, and the note will tell you the order.', 'Fuse in the panel. Lamps flash first, third, second, fourth, second, first, fourth, third, in three rounds.'],
@@ -238,5 +230,5 @@ export const GENERATED_LEVELS = Object.entries(ALL).flatMap(([f, rooms]) => room
   intro: i === 0 ? FLOOR_INTRO[f] : r.intro,
   hints: r.hints,
   spec: r,
-  mount: (ctx) => mountRoom(ctx, { ...r, image: `assets/rooms/${r.id}.webp` }),
+  mount: r.custom ? SPECIAL[r.custom] : (ctx) => mountRoom(ctx, { ...r, image: `assets/rooms/${r.id}.webp` }),
 })));

@@ -41,26 +41,27 @@ export function lightsOut(ctx, { lamps, rule, title = 'Switchboard', note = 'Old
   });
 }
 
-export function wires(ctx, { colors, right, title = 'Service panel' }) {
+export function wires(ctx, { colors, right, title = 'Service panel', hidden = false }) {
   const { showCard, closeCard, $, audio, haptic, toast } = ctx;
   const n = colors.length, S = 300, ys = colors.map((_, i) => 30 + (i * (S - 60)) / (n - 1));
   const connected = colors.map(() => null);
-  const body = showCard(`<h2>${title}</h2><svg class="wires" id="wires" viewBox="0 0 ${S} ${S}"></svg><p style="text-align:center;opacity:.8;font-size:13px">Drag each wire to the terminal of the same colour.</p>`);
+  const body = showCard(`<h2>${title}</h2><svg class="wires" id="wires" viewBox="0 0 ${S} ${S}"></svg><p style="text-align:center;opacity:.8;font-size:13px">${hidden ? 'The colours have faded. Touch a terminal to see it, briefly.' : 'Drag each wire to the terminal of the same colour.'}</p>`);
   const svg = $('#wires', body), NS = 'http://www.w3.org/2000/svg';
   const mk = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
   mk('rect', { x: 0, y: 0, width: S, height: S, rx: 10, fill: '#0b1420', stroke: '#d9a441', 'stroke-width': 4 });
   const lines = colors.map((c, i) => mk('line', { x1: 30, y1: ys[i], x2: 30, y2: ys[i], stroke: c, 'stroke-width': 8, 'stroke-linecap': 'round', opacity: 0 }));
-  colors.forEach((c, i) => { mk('circle', { cx: 30, cy: ys[i], r: 14, fill: c, stroke: '#000', 'stroke-width': 3 }); mk('circle', { cx: 270, cy: ys[i], r: 14, fill: colors[right[i]], stroke: '#000', 'stroke-width': 3 }); });
+  const dots = colors.map((c, i) => [mk('circle', { cx: 30, cy: ys[i], r: 14, fill: hidden ? '#555' : c, stroke: '#000', 'stroke-width': 3 }), mk('circle', { cx: 270, cy: ys[i], r: 14, fill: hidden ? '#555' : colors[right[i]], stroke: '#000', 'stroke-width': 3 })]);
+  const reveal = (i, side) => { if (!hidden) return; const d = dots[i][side]; d.setAttribute('fill', side === 0 ? colors[i] : colors[right[i]]); setTimeout(() => { if (!(side === 0 ? connected[i] !== null : connected.includes(i))) d.setAttribute('fill', '#555'); }, 1200); };
   const drag = mk('rect', { x: 0, y: 0, width: S, height: S, fill: 'transparent' });
   let active = -1;
   const pt = (e) => { const b = svg.getBoundingClientRect(); return { x: (e.clientX - b.left) * S / b.width, y: (e.clientY - b.top) * S / b.height }; };
-  drag.addEventListener('pointerdown', (e) => { const p = pt(e); const i = ys.findIndex((y) => Math.hypot(p.x - 30, y - p.y) < 26); if (i < 0 || connected[i] !== null) return; active = i; drag.setPointerCapture(e.pointerId); lines[i].setAttribute('opacity', 1); lines[i].setAttribute('x2', p.x); lines[i].setAttribute('y2', p.y); });
+  drag.addEventListener('pointerdown', (e) => { const p = pt(e); const j = ys.findIndex((y) => Math.hypot(p.x - 270, y - p.y) < 26); if (j >= 0) reveal(j, 1); const i = ys.findIndex((y) => Math.hypot(p.x - 30, y - p.y) < 26); if (i < 0 || connected[i] !== null) return; reveal(i, 0); active = i; drag.setPointerCapture(e.pointerId); lines[i].setAttribute('opacity', 1); lines[i].setAttribute('x2', p.x); lines[i].setAttribute('y2', p.y); });
   drag.addEventListener('pointermove', (e) => { if (active < 0) return; const p = pt(e); lines[active].setAttribute('x2', p.x); lines[active].setAttribute('y2', p.y); });
   const release = (e) => {
     if (active < 0) return; const p = pt(e);
     const j = ys.findIndex((y) => Math.hypot(p.x - 270, y - p.y) < 26);
     if (j >= 0 && right[j] === active && !connected.includes(j)) {
-      connected[active] = j; lines[active].setAttribute('x2', 270); lines[active].setAttribute('y2', ys[j]); audio.tone(600 + active * 100, 0.15, 'triangle'); haptic(10);
+      connected[active] = j; lines[active].setAttribute('x2', 270); lines[active].setAttribute('y2', ys[j]); audio.tone(600 + active * 100, 0.15, 'triangle'); haptic(10); if (hidden) { dots[active][0].setAttribute('fill', colors[active]); dots[j][1].setAttribute('fill', colors[active]); }
       if (connected.every((c) => c !== null)) { audio.ding(); setTimeout(() => { closeCard(); ctx.solve(); }, 500); }
     } else { if (j >= 0) { audio.error(); haptic([40, 40]); toast('Sparks!'); } lines[active].setAttribute('opacity', 0); lines[active].setAttribute('x2', 30); lines[active].setAttribute('y2', ys[active]); }
     active = -1;
@@ -191,7 +192,7 @@ export function lens(ctx, { items, title = 'Under the glass' }) {
   wrap.addEventListener('pointerup', () => { down = false; }); wrap.addEventListener('pointercancel', () => { down = false; });
 }
 
-export function piano(ctx, { melody, title = 'The piano' }) {
+export function piano(ctx, { melody, title = 'The piano', octave = null }) {
   const { showCard, closeCard, $, el, audio, haptic } = ctx;
   const KEYS = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'A', 'B'];
   const FREQ = { C: 261.63, D: 293.66, E: 329.63, F: 349.23, G: 392.0, A: 440.0, B: 493.88 };
@@ -203,8 +204,9 @@ export function piano(ctx, { melody, title = 'The piano' }) {
     k.addEventListener('click', () => {
       if (done) return; audio.init(); audio.tone(FREQ[note] * (i < 7 ? 1 : 2), 0.5, 'triangle', 0.1); haptic(6);
       k.classList.add('down'); setTimeout(() => k.classList.remove('down'), 150);
-      if (melody[progress] === note) { progress++; if (progress === melody.length) { done = true; setTimeout(() => { audio.ding(); closeCard(); ctx.solve(); }, 500); } }
-      else progress = note === melody[0] ? 1 : 0;
+      const oct = i < 7 ? 1 : 2; const ok = melody[progress] === note && (octave === null || octave === oct);
+      if (ok) { progress++; if (progress === melody.length) { done = true; setTimeout(() => { audio.ding(); closeCard(); ctx.solve(); }, 500); } }
+      else progress = (note === melody[0] && (octave === null || octave === oct)) ? 1 : 0;
     });
     wrap.appendChild(k);
     if (![2, 6].includes(i % 7)) { const b = el('div', 'pkey black'); wrap.appendChild(b); }

@@ -45,6 +45,21 @@ legends; Morse lamps; fog wiping; magnifier search; cipher wheels; dial combinat
 wire matching; balance scales; tilt mazes; piano melodies; sliding pictures; pattern locks; tap sequences;
 growing memory sequences; timed sequences; and gated objects that need an item first.
 
+Ten rooms on these floors are hand-made with a mechanic that appears nowhere else (`js/puzzles/special.js`):
+
+| Room | Mechanic |
+|------|----------|
+| 304 | slide a lamp until the grille's shadow spells the code |
+| 402 | invisible ink that appears under a held finger and fades again |
+| 503 | count groups of knocks from a pipe |
+| 608 | kitchen scale with weights you first have to work out from a recipe |
+| 703 | pan across the night sky (compass or drag) to find digit constellations |
+| 803 | spot five differences between twin paintings |
+| 904 | elevator logic: four portraits, one liar |
+| 909 | play back a gramophone tune an octave lower |
+| 1004 | pitch-black room with a torch on a tired battery |
+| 1008 | hold two plates and slide a bolt with a third finger |
+
 ## Tech
 
 - Plain HTML, CSS and ES modules. No build step, no dependencies.

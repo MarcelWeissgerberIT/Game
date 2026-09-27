@@ -64,6 +64,7 @@ function startLevel(i) {
       level: lv,
       solve: () => onSolved(lv, i),
     };
+    if (E.DEBUG) window.__room = lv.spec || null;
     cleanup = lv.mount(ctx) || null;
     const reveal = () => { fade.classList.remove('on'); if (lv.intro) E.toast(lv.intro, 3200); };
     if (roomImg.complete) reveal(); else roomImg.onload = reveal;
