@@ -19,11 +19,13 @@ export const DEBUG = new URLSearchParams(location.search).has('debug');
 export const audio = {
   ctx: null,
   init() {
-    if (this.ctx) return;
-    try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch { this.ctx = null; }
+    if (!this.ctx) { try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch { this.ctx = null; } }
+    // iOS keeps a fresh context suspended until a user gesture resumes it
+    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
   },
   tone(freq, dur = 0.08, type = 'sine', gain = 0.08, when = 0) {
     if (!this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
     const t = this.ctx.currentTime + when;
     const o = this.ctx.createOscillator();
     const g = this.ctx.createGain();

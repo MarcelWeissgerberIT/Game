@@ -238,3 +238,6 @@ button { font: inherit; }
 .lang-row { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
 .lang-btn { width: 44px; height: 30px; border-radius: 15px; border: 2px solid var(--gold); background: rgba(11,20,32,.7); color: var(--gold-2); font-size: 12px; letter-spacing: .1em; cursor: pointer; }
 .lang-btn.on { background: linear-gradient(180deg, var(--gold-2), var(--gold)); color: #201500; }
+
+.key-flash { position: absolute; border-radius: 0 0 4px 4px; background: rgba(243,201,107,.85); box-shadow: 0 0 14px rgba(243,201,107,.9); pointer-events: none; animation: keyflash .26s ease-out forwards; }
+@keyframes keyflash { from { opacity: 1; } to { opacity: 0; } }

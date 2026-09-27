@@ -1,6 +1,6 @@
 // Room 206 – The Piano. Play the notes written on the sheet.
 export default function mount(ctx) {
-  const { hotspot, showCard, toast, solve, audio, haptic } = ctx;
+  const { hotspot, showCard, toast, solve, audio, haptic, el, place, layer } = ctx;
   const MELODY = ['G', 'E', 'C', 'D', 'G'];
   const KEYS = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'A', 'B'];
   const FREQ = { C: 261.63, D: 293.66, E: 329.63, F: 349.23, G: 392.0, A: 440.0, B: 493.88 };
@@ -27,12 +27,17 @@ export default function mount(ctx) {
       audio.init();
       const f = FREQ[note] * (i < 7 ? 1 : 2);
       audio.tone(f, 0.5, 'triangle', 0.1); haptic(6);
+      // visible key press, so the room works with the sound off
+      const flash = el('div', 'key-flash'); place(flash, { x: X0 + i * w, y: 68, w, h: 7 }); layer.appendChild(flash);
+      setTimeout(() => flash.remove(), 260);
       if (MELODY[progress] === note) {
         progress++;
+        toast(MELODY.slice(0, progress).join(' \u00b7 '), 1200);
         if (progress === MELODY.length) { done = true; setTimeout(() => { audio.ding(); solve(); }, 500); }
       } else {
         progress = note === MELODY[0] ? 1 : 0;
         audio.tone(f * 1.06, 0.4, 'sawtooth', 0.04);
+        toast(progress ? note : `${note} \u2717`, 1200);
       }
     } });
   });
