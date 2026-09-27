@@ -202,3 +202,14 @@ button { font: inherit; }
 .floor-row { display: flex; justify-content: center; gap: 8px; margin: 12px 0; }
 .floor-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); background: #1a1207; color: var(--gold-2); font-family: var(--font-display); font-size: 16px; cursor: pointer; }
 .floor-btn.on { background: radial-gradient(circle, #fff3c4, #d9a441); color: #201500; box-shadow: 0 0 14px rgba(243,201,107,.8); }
+
+/* Generated floors */
+.stage { container-type: size; }
+.plate { position: absolute; display: grid; place-items: center; font-family: var(--font-display); font-weight: bold; color: #3a2606; font-size: 3.2cqh; letter-spacing: .08em;
+  background: linear-gradient(180deg, #f3d27a, #c9962e 55%, #e2b653); border: .35cqh solid #6b4a12; border-radius: .6cqh; box-shadow: 0 .3cqh .8cqh rgba(0,0,0,.6), inset 0 .2cqh 0 rgba(255,255,255,.4); text-shadow: 0 1px 0 rgba(255,255,255,.35); pointer-events: none; }
+.piano { display: flex; position: relative; height: 150px; border: 4px solid var(--gold); border-radius: 6px; background: #111; padding: 4px; overflow: hidden; }
+.pkey { flex: 1; background: linear-gradient(180deg, #f4ead2, #d9cdb0); border: 1px solid #333; border-radius: 0 0 4px 4px; cursor: pointer; }
+.pkey.down { background: #f3c96b; }
+.pkey.black { flex: 0 0 4.5%; margin: 0 -2.25%; height: 60%; background: #1a1207; border: 1px solid #000; z-index: 2; pointer-events: none; border-radius: 0 0 3px 3px; }
+.slide-card { position: relative; width: 100%; background: #06101a; border: 4px solid var(--gold); border-radius: 6px; overflow: hidden; }
+.lens-secret span { position: absolute; }

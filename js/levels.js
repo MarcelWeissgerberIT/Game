@@ -19,6 +19,7 @@ import r207 from './puzzles/207.js';
 import r208 from './puzzles/208.js';
 import r209 from './puzzles/209.js';
 import r210 from './puzzles/210.js';
+import { GENERATED_LEVELS } from './floors.js';
 
 export const LEVELS = [
   { floor: 'Floor One', id: 101, title: 'The Key', image: 'assets/rooms/101.webp', door: { x: 27, y: 27, w: 45, h: 50 },
@@ -81,4 +82,5 @@ export const LEVELS = [
   { floor: 'Floor Two', id: 210, title: 'The Fuse', image: 'assets/rooms/210.webp', door: { x: 30, y: 42, w: 40, h: 35 },
     intro: 'The elevator again. Dead again.',
     hints: ['Power first. Check the drawers.', 'Two plus one plus zero: send the cab to the third floor.'], mount: r210 },
+  ...GENERATED_LEVELS,
 ];

@@ -128,6 +128,8 @@ E.$('#btn-menu').addEventListener('click', () => {
 E.$('#btn-hint').addEventListener('click', () => { E.audio.init(); showHint(); });
 E.$('#btn-play').textContent = progress.unlocked > 0 || progress.done.length ? 'Continue' : 'Check in';
 
+if (E.DEBUG) window.__forceSolve = () => onSolved(LEVELS[current], current);
+
 // PWA
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));

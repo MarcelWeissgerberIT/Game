@@ -35,12 +35,22 @@ art deco hotel. Find the trick, open the door, move on.
 | 209 | The Memory | repeat a growing lamp sequence |
 | 210 | The Fuse | restore power, pick the right floor |
 
+## Floors Three to Ten (rooms 301-1010)
+
+Eighty more rooms, described as data in `js/floors.js` and mounted by the generic room engine in `js/lib/`.
+Each floor has its own decor (ballroom, library, baths, kitchens, observatory, gallery, penthouse, rooftop)
+and two fixed layouts, so hotspots line up without per-room tuning. Puzzle types include keypad codes from
+roman numerals, mirrored text, clocks, counting, tallies, binary, dominoes, letters, riddles and symbol
+legends; Morse lamps; fog wiping; magnifier search; cipher wheels; dial combinations; lights-out switches;
+wire matching; balance scales; tilt mazes; piano melodies; sliding pictures; pattern locks; tap sequences;
+growing memory sequences; timed sequences; and gated objects that need an item first.
+
 ## Tech
 
 - Plain HTML, CSS and ES modules. No build step, no dependencies.
 - Installable PWA with offline cache (`sw.js`, `manifest.webmanifest`).
 - Deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
-- Artwork generated with OpenArt (Nano Banana Pro / Nano Banana 2) from one style reference, see `tools/fetch_assets.py`.
+- Artwork generated with OpenArt (Nano Banana Pro / Nano Banana 2) from one style reference, see `tools/fetch_assets.py` and `tools/fetch_floors.py`.
 
 ## Develop
 
@@ -49,7 +59,13 @@ python3 -m http.server 8080
 # open http://localhost:8080/?debug  -> shows hotspot outlines
 ```
 
-## Adding a room
+## Adding a room on a generated floor
+
+Add an entry to the floor array in `js/floors.js`: pick layout A or B, list the objects (clues, items, locks)
+and drop the artwork in `assets/rooms/<id>.webp`. Widgets live in `js/lib/widgets.js`, clue cards in
+`js/lib/clues.js`, slot positions in `js/lib/room.js`.
+
+## Adding a hand-made room
 
 1. Generate the artwork (9:16) and drop it in `assets/rooms/<id>.webp`.
 2. Create `js/puzzles/<id>.js` exporting `mount(ctx)`; use `ctx.hotspot`, `ctx.showCard`, `ctx.showKeypad`,
