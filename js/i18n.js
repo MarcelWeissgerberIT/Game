@@ -9,6 +9,7 @@ try { const saved = localStorage.getItem(KEY); if (saved && DICTS[saved] !== und
 if (lang === 'en') { try { if (!localStorage.getItem(KEY) && /^de/i.test(navigator.language || '')) lang = 'de'; } catch { /* ignore */ } }
 
 export const missing = new Set();
+const KNOWN_VALUES = new Set(Object.values(DE));
 
 export function setLang(l) {
   lang = DICTS[l] !== undefined ? l : 'en';
@@ -24,7 +25,7 @@ export function t(text, vars) {
   if (!dict) return fill(text, vars);
   const key = String(text);
   const hit = dict[key];
-  if (hit === undefined) { if (/[A-Za-z]{2,}/.test(key)) missing.add(key); return fill(key, vars); }
+  if (hit === undefined) { if (/[A-Za-z]{2,}/.test(key) && !KNOWN_VALUES.has(key)) missing.add(key); return fill(key, vars); }
   return fill(hit, vars);
 }
 

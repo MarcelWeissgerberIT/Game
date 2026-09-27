@@ -1,6 +1,6 @@
 // Clue card renderers for the generated floors. Each returns HTML for ctx.showCard.
 import { t } from '../i18n.js';
-const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX'];
 export const roman = (n) => ROMAN[n] ?? String(n);
 const note = (inner, title) => `${title ? `<h2>${title}</h2>` : ''}<div class="note">${inner}</div>`;
 const plaque = (inner, title) => `${title ? `<h2>${title}</h2>` : ''}<div class="plaque upright">${inner}</div>`;

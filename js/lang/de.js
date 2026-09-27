@@ -350,4 +350,5 @@ export const DE = {
   'The elevator': 'Der Aufzug',
   'Elevator': 'Aufzug',
   'Back': 'Zurück', 'Menu': 'Menü', 'Hint': 'Hinweis', 'Reset progress': 'Fortschritt zurücksetzen',
+  'The chandelier sways. Shake harder!': 'Der Kronleuchter schwankt. Schüttle stärker!', 'The chandelier sways. Keep tapping!': 'Der Kronleuchter schwankt. Tipp weiter!', 'Something clatters onto the marble.': 'Etwas scheppert auf den Marmor.',
 };
