@@ -5,7 +5,7 @@ export default function mount(ctx) {
   const RIGHT = [2, 0, 3, 1]; // colour index at each right-hand terminal, top to bottom
   let opened = false;
 
-  hotspot({ x: 30, y: 32, w: 40, h: 45, label: 'Elevator', onTap: () => toast(opened ? 'The elevator is still dead.' : 'The elevator is dead. Nothing lights up.') });
+  hotspot({ x: 30, y: 32, w: 40, h: 45, label: 'Elevator', onTap: () => toast('Nothing lights up.') });
 
   hotspot({ x: 6, y: 76, w: 28, h: 9, label: 'Screwdriver', onTap: (n) => {
     inventory.add('screwdriver', icons.screwdriver, 'Screwdriver'); n.remove(); toast('A flat-head screwdriver.');
@@ -15,7 +15,7 @@ export default function mount(ctx) {
     if (!opened) {
       if (inventory.selected === 'screwdriver') { opened = true; inventory.remove('screwdriver'); toast('The cover comes off. Loose wires everywhere.'); openWires(); }
       else if (inventory.has('screwdriver')) toast('Select the screwdriver first.');
-      else toast('Screwed shut. Four brass screws.');
+      else toast('Screwed shut.');
     } else openWires();
   } });
 

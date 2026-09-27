@@ -14,7 +14,18 @@ ROOMS = {
   108: "image_1790495026074_0c9bfa3a_1790495026710_0321f928.png",
   109: "image_1790495030039_f025c26a_1790495030474_1ed7e3e9.png",
   110: "image_1790495036207_fe0b13d0_1790495036838_f2e1d167.png",
+  201: "image_1790501013329_adcc645a_1790501013730_ce6e68c7.png",
+  202: "image_1790501015178_9fd6db16_1790501015577_b613eab2.png",
+  203: "image_1790501020601_b3414064_1790501021103_4ce08e21.png",
+  204: "image_1790501024423_17556689_1790501025061_ef70ee83.png",
+  205: "image_1790501028101_14b25b4b_1790501028802_460ef33d.png",
+  206: "image_1790501033834_4af45bb4_1790501034324_5d6633c1.png",
+  207: "image_1790501036566_4e6c9295_1790501037308_7568f275.png",
+  208: "image_1790501042289_f1a71bb6_1790501042984_2e095227.png",
+  209: "image_1790501050046_2b2036ad_1790501050411_afc3a338.png",
+  210: "image_1790501051981_48cd4c9d_1790501053221_20bd88e5.png",
 }
+ONLY = [int(a) for a in sys.argv[2:]] or list(ROOMS)
 ICON = "image_1790495037459_7e2a94eb_1790495037983_c0ddb973.png"
 PREVIEW_DIR = sys.argv[1]
 
@@ -33,6 +44,7 @@ def gridded(im, out, step=10):
     im.save(out, quality=85)
 
 for n, f in ROOMS.items():
+    if n not in ONLY: continue
     raw = f"tools/raw/{n}.png"
     get(f, raw)
     im = Image.open(raw).convert("RGB")
@@ -40,6 +52,7 @@ for n, f in ROOMS.items():
     gridded(im, f"{PREVIEW_DIR}/{n}.jpg")
     print(n, "ok")
 
+if len(sys.argv) > 2: sys.exit(0)
 t = Image.open("tools/raw/title.png").convert("RGB")
 t.resize((1080, 1920), Image.LANCZOS).save("assets/ui/title.webp", quality=82, method=6)
 get(ICON, "tools/raw/icon.png")

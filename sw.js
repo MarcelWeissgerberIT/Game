@@ -1,9 +1,9 @@
 // Offline cache for Hotel Nocturne. Bump CACHE when assets change.
-const CACHE = 'nocturne-v1';
+const CACHE = 'nocturne-v2';
 const ASSETS = [
   './', './index.html', './css/style.css', './manifest.webmanifest',
   './js/main.js', './js/engine.js', './js/levels.js',
-  ...[101, 102, 103, 104, 105, 106, 107, 108, 109, 110].flatMap((n) => [`./js/puzzles/${n}.js`, `./assets/rooms/${n}.webp`]),
+  ...[101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210].flatMap((n) => [`./js/puzzles/${n}.js`, `./assets/rooms/${n}.webp`]),
   './assets/ui/title.webp', './assets/ui/icon-192.png', './assets/ui/icon-512.png',
 ];
 

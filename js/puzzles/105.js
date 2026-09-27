@@ -6,7 +6,7 @@ export default function mount(ctx) {
   let progress = 0;
   let done = false;
 
-  hotspot({ x: 22, y: 25, w: 55, h: 52, label: 'Door', onTap: () => toast('Two heavy doors. They will not budge while the lamps are dark.') });
+  hotspot({ x: 22, y: 25, w: 55, h: 52, label: 'Door', onTap: () => toast('Two heavy doors. They do not move.') });
 
   const glows = xs.map((x) => glow({ x: x - 3, y: 6, w: 17, h: 18 }));
 

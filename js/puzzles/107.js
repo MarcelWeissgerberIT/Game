@@ -39,12 +39,12 @@ export default function mount(ctx) {
   };
   if (touch && !(window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function')) armMotion();
 
-  hotspot({ x: 27, y: 30, w: 45, h: 47, label: 'Door', onTap: () => toast('Locked. A keyhole below the handle.') });
+  hotspot({ x: 27, y: 30, w: 45, h: 47, label: 'Door', onTap: () => toast('Locked.') });
   hotspot({ x: 30, y: 4, w: 40, h: 24, label: 'Chandelier', onTap: () => { armMotion(); registerShake(); } });
   hotspot({ x: 30, y: 52, w: 11, h: 13, label: 'Lock', onTap: () => {
     if (inventory.selected === 'key') { inventory.remove('key'); solve(); }
     else if (inventory.has('key')) toast('Select the key first.');
-    else toast('A keyhole. Something glints up in the chandelier.');
+    else toast('A keyhole. Empty.');
   } });
 
   return () => window.removeEventListener('devicemotion', onMotion);

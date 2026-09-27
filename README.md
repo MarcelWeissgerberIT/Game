@@ -20,6 +20,21 @@ art deco hotel. Find the trick, open the door, move on.
 | 109 | The Wallpaper | drag a magnifying glass |
 | 110 | The Elevator | drag wires to terminals |
 
+## Rooms (Floor Two)
+
+| Room | Puzzle | Interaction |
+|------|--------|-------------|
+| 201 | The Signal | decode a blinking Morse lamp |
+| 202 | The Painting | sliding-tile puzzle, then keypad |
+| 203 | The Plaque | turn the phone upside down |
+| 204 | The Tally | remember details from Floor One |
+| 205 | The Lever | memorise and tap in order against the clock |
+| 206 | The Piano | play the melody on the sheet |
+| 207 | The Scale | balance the box with weights |
+| 208 | The Cipher | align a cipher wheel |
+| 209 | The Memory | repeat a growing lamp sequence |
+| 210 | The Fuse | restore power, pick the right floor |
+
 ## Tech
 
 - Plain HTML, CSS and ES modules. No build step, no dependencies.

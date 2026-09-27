@@ -4,10 +4,11 @@ export default function mount(ctx) {
   const CODE = '2847';
   let revealed = false;
 
-  hotspot({ x: 32, y: 30, w: 38, h: 47, label: 'Door', onTap: () => toast('Locked. The keypad glows faintly.') });
+  hotspot({ x: 32, y: 30, w: 38, h: 47, label: 'Door', onTap: () => toast('Locked.') });
+  hotspot({ x: 62, y: 50, w: 8, h: 10, label: 'Sign', onTap: () => showCard(`<h2>Door hanger</h2><div class="note"><p style="margin:0;font-size:12px;letter-spacing:.2em">DO NOT DISTURB</p><div class="big" style="font-size:18px;letter-spacing:.05em">the guest writes from the other side of the glass</div></div>`) });
 
   hotspot({ x: 2, y: 32, w: 24, h: 32, label: 'Mirror', onTap: () => {
-    const body = showCard(`<h2>Fogged mirror</h2><div class="wipe-wrap"><div class="wipe-text">${CODE}</div><canvas id="fog"></canvas></div><p style="text-align:center;opacity:.8;font-size:13px">Wipe the glass with your finger.</p>`);
+    const body = showCard(`<h2>Fogged mirror</h2><div class="wipe-wrap"><div class="wipe-text mirrored">${CODE}</div><canvas id="fog"></canvas></div><p style="text-align:center;opacity:.8;font-size:13px">Wipe the glass with your finger.</p>`);
     const wrap = $('.wipe-wrap', body);
     const canvas = $('#fog', body);
     const dpr = Math.min(window.devicePixelRatio || 1, 2);

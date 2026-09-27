@@ -3,7 +3,7 @@ export default function mount(ctx) {
   const { hotspot, showCard, showKeypad, toast, solve } = ctx;
   const CODE = '0915';
 
-  hotspot({ x: 30, y: 30, w: 40, h: 47, label: 'Door', onTap: () => toast('The lock is electronic. Try the keypad.') });
+  hotspot({ x: 30, y: 30, w: 40, h: 47, label: 'Door', onTap: () => toast('Locked. A soft electronic click.') });
 
   const clockSvg = (hourDeg, minDeg) => `
     <svg viewBox="0 0 200 200" width="100%" style="max-width:220px;display:block;margin:0 auto">
@@ -18,7 +18,7 @@ export default function mount(ctx) {
     </svg>`;
 
   hotspot({ x: 2, y: 31, w: 18, h: 13, circle: true, label: 'Clock', onTap: () => {
-    showCard(`<h2>The lobby clock</h2>${clockSvg(277.5, 90)}<p style="text-align:center;opacity:.85">It stopped the night the guests vanished, and nobody has dared to wind it since.</p>`);
+    showCard(`<h2>The lobby clock</h2><div class="mirrored">${clockSvg(277.5, 90)}</div><p style="text-align:center;opacity:.85">You see it reflected in the mirror across the hall. It stopped the night the guests vanished.</p>`);
   } });
 
   hotspot({ x: 70, y: 46, w: 11, h: 12, label: 'Keypad', onTap: () => showKeypad({ code: CODE, title: 'Room 102', onSolve: solve }) });

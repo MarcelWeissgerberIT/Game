@@ -4,7 +4,7 @@ export default function mount(ctx) {
   const COLS = 7, ROWS = 9;
   let stopLoop = null;
 
-  hotspot({ x: 32, y: 40, w: 38, h: 37, label: 'Door', onTap: () => toast('No handle, no keyhole. The panel beside the door hums.') });
+  hotspot({ x: 32, y: 40, w: 38, h: 37, label: 'Door', onTap: () => toast('Sealed. No handle at all.') });
 
   // Deterministic maze (same every time) via a seeded PRNG + DFS carve.
   function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }

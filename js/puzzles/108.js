@@ -5,7 +5,7 @@ export default function mount(ctx) {
   const xs = [28, 39, 50, 61];
   let done = false;
 
-  hotspot({ x: 30, y: 32, w: 40, h: 45, label: 'Door', onTap: () => toast('The door hums. It wants all four lamps lit.') });
+  hotspot({ x: 30, y: 32, w: 40, h: 45, label: 'Door', onTap: () => toast('The door hums faintly.') });
 
   const glows = xs.map((x) => glow({ x: x - 4, y: 17, w: 19, h: 20 }));
   const paint = () => glows.forEach((g, i) => g.classList.toggle('on', !!lamps[i]));
