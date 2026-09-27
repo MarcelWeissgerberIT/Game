@@ -3,7 +3,7 @@
 A mobile-first escape-room puzzle game in the spirit of *100 Doors*. Every level is one door of a mysterious
 art deco hotel. Find the trick, open the door, move on.
 
-**Play:** https://marcelweissgerberit.github.io/game/
+**Play:** https://marcelweissgerberit.github.io/Game/
 
 ## Rooms (Floor One)
 
